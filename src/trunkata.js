@@ -7,15 +7,16 @@
  */
 
 (function($) {
+  var slice = [].slice;
   // TODO: Will we composite truncations together? (e.g. {lines: 3, words: 2} would add them together? or would we choose which occurs first/last?)
-  // TODO: Move this to jQuery module style -- $item.trunkata('truncate', {'words': 3}); -- or don't ;)
-  // TODO: Save original text to data-trunkata-text
+  // TODO: Save original text to data-trunkata-text -- this should be the immediate set of children of $item
   // TODO: Custom comparator (over lines/words)
   // TODO: Cusotm value -- e.g. &raquo; over &hellip;
   // TODO: Eventually implement trunk8's left, center, right x_x
   // TODO: trunkata('reset')
   function trunkata(item) {
     var $item = $(item);
+    this.$item = $item;
 
     // TODO: If we have been here before, reset the item's children
 
@@ -28,10 +29,45 @@
     // TODO: Take the nodes after, if it is not an immediate child of $item, remove it from its parent. if it is an immediate child, remove it and skip over any future nodes that are not immediate children (since they are automatically removed)
     // TODO: Thank you, have a nice day!
   }
+  var trunkataProto = {
+    'trunkata': function () {
+      var $item = this.$item;
+      if ($item.html().indexOf('Hello') === -1) {
+        $item.html('abba');
+      }
+    },
+    'truncate': function () {
+      var args = slice.call(arguments);
+      return this.trunkata.apply(this, arguments);
+    }
+  };
+  trunkata.prototype = trunkataProto;
 
-  function trunkataEach() {
+  function trunkataEach(method) {
+    var args;
+    // If the method is not a string, fallback to 'trunkata' and slice all the arguments
+    if (typeof method !== 'string') {
+      method = 'trunkata';
+      args = slice.call(arguments);
+    } else {
+    // Otherwise, slice everything except method
+      args = slice.call(arguments, 1);
+    }
+
+    // Iterate over the collection
     return this.each(function () {
-      return trunkata(this);
+      // Retrieve the trunkata instance
+      var $this = $(this),
+          $trunkata = $this.data('_trunkata');
+
+      // If there is no trunkata, create one
+      if (!$trunkata) {
+        $trunkata = new trunkata(this);
+        $this.data('_trunkata', $trunkata);
+      }
+
+      // Apply and return the method
+      return trunkataProto[method].apply($trunkata, args);
     });
   }
 
