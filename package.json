@@ -1,0 +1,16 @@
+{
+  "name": "trunkata",
+  "version": "0.0.0",
+  "description": "Truncate your DOM with proper form",
+  "main": "lib/trunkata.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dom",
+    "truncate",
+    "text"
+  ],
+  "author": "Todd Wolfson <todd@twolfson.com>",
+  "license": "MIT"
+}
