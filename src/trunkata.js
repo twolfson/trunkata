@@ -9,7 +9,9 @@
 (function($) {
   function trunkata(item) {
     var $item = $(item);
-    // $item.html('abba');
+    if ($item.html().indexOf('Hello') === -1) {
+      $item.html('abba');
+    }
   }
 
   function trunkataEach() {

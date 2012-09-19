@@ -69,6 +69,12 @@
     $testArea.empty();
   }
 
+  function getNumericProperty($elt, prop) {
+    var propPx = $testArea.css(prop),
+        retVal = parseInt(propPx, 10); /* no need for +propPx.replace, woot! */
+    return retVal;
+  }
+
   // test('A short sentence trunkata\'d' /* is not affected */, 1, wrap(function () {
   test('A short sentence trunkata\'d' /* is not affected */, 1, function () { before();
     // A short sentence
@@ -82,46 +88,48 @@
     strictEqual($testArea.text(), sentence, 'is not affected');
   });
 
-  // test('A long sentence' + 'trunkata\'d to 150 words' /* 'is at most 150 words long' */, 1, wrap(function () {
-  //   // A long sentence
-  //   var sentence = LIPSUM;
-  //   $testArea.addParagraph(sentence);
+  test('A long sentence' + 'trunkata\'d to 150 words' /* 'is at most 150 words long' */, 1, function () { before();
+    // A long sentence
+    var sentence = LIPSUM;
+    $testArea.addParagraph(sentence);
 
-  //   // trunkata'd to 150 words
-  //   $testArea.trunkata({'words': 150});
+    // trunkata'd to 150 words
+    $testArea.trunkata({'words': 150});
 
-  //   // is at most 150 words long
-  //   ok($testArea.text().length <= 150, 'is at most 150 words long');
-  // }));
+    // is at most 150 words long
+    ok($testArea.text().length <= 150, 'is at most 150 words long');
+  });
 
-  // test('A multi-line paragraph' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, wrap(function () {
-  //   // A multi-line sentence
-  //   var sentence = LIPSUM + LIPSUM;
-  //   $testArea.addParagraph(sentence);
+  test('A multi-line paragraph' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, function () {  before();
+    // A multi-line sentence
+    var sentence = LIPSUM + LIPSUM;
+    $testArea.addParagraph(sentence);
 
-  //   // trunkata'd to 2 lines
-  //   $testArea.trunkata({'lines': 2});
+    // trunkata'd to 2 lines
+    $testArea.trunkata({'lines': 2});
 
-  //   // is at most 2 lines
-  //   var lineHeight = $testArea.css('line-height'),
-  //       twoLines = lineHeight * 2;
-  //   ok($testArea.css('height') <= twoLines, 'is at most 2 lines');
-  // }));
+    // is at most 2 lines
+    var lineHeight = getNumericProperty($testArea, 'line-height'),
+        twoLines = lineHeight * 2,
+        height = getNumericProperty($testArea, 'height');
+    ok(height <= twoLines, 'is at most 2 lines');
+  });
 
-  // test('A div with multiple child paragraphs' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, wrap(function () {
-  //   // A div with multiple child paragraphs
-  //   var sentence = LIPSUM + LIPSUM;
-  //   $testArea.addParagraph(sentence);
-  //   $testArea.addParagraph(sentence);
-  //   $testArea.addParagraph(sentence);
+  test('A div with multiple child paragraphs' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, function () { before();
+    // A div with multiple child paragraphs
+    var sentence = LIPSUM + LIPSUM;
+    $testArea.addParagraph(sentence);
+    $testArea.addParagraph(sentence);
+    $testArea.addParagraph(sentence);
 
-  //   // trunkata'd to 2 lines
-  //   $testArea.trunkata({'lines': 2});
+    // trunkata'd to 2 lines
+    $testArea.trunkata({'lines': 2});
 
-  //   // is at most 2 lines
-  //   var lineHeight = $testArea.css('line-height'),
-  //       twoLines = lineHeight * 2;
-  //   ok($testArea.css('height') <= twoLines, 'is at most 2 lines');
-  // }));
+    // is at most 2 lines
+    var lineHeight = getNumericProperty($testArea, 'line-height'),
+        twoLines = lineHeight * 2,
+        height = getNumericProperty($testArea, 'height');
+    ok(height <= twoLines, 'is at most 2 lines');
+  });
 
 }(jQuery));
