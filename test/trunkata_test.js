@@ -3,6 +3,30 @@
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
 (function($) {
 
+  // Skeleton
+  var SKELETON = {
+    'A short sentence': {
+      'trunkata\'d': {
+        'is not affected': {}
+      }
+    },
+    'A long sentence': {
+      'trunkata\'d to 150 words': {
+        'is at most 150 words long': {}
+      }
+    },
+    'A multi-line paragraph': {
+      'trunkata\'d to 2 lines': {
+        'is at most 2 lines': {}
+      }
+    },
+    'A multi-child div': {
+      'trunkata\'d to 2 lines': {
+        'is at most 2 lines': {}
+      }
+    }
+  };
+
   /*
     ======== A Handy Little QUnit Reference ========
     http://docs.jquery.com/QUnit
