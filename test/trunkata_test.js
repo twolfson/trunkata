@@ -20,7 +20,7 @@
         'is at most 2 lines': {}
       }
     },
-    'A multi-child div': {
+    'A div with multiple child paragraphs': {
       'trunkata\'d to 2 lines': {
         'is at most 2 lines': {}
       }
@@ -49,7 +49,8 @@
   module('jquery#trunkata', {});
 
   // Set up test area
-  var $testArea = $('#TEST_AREA');
+  var $testArea = $('#TEST_AREA'),
+      LIPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ligula justo, viverra sed consequat ut, facilisis vel tortor. Nunc et aliquam tortor. Nunc vulputate odio ut lectus volutpat vehicula. In blandit tempus erat ut mattis. Suspendisse malesuada, sapien nec pharetra viverra, nulla neque laoreet lorem, quis dapibus odio erat vel felis. Pellentesque ac nibh eros, dictum placerat turpis. Aenean vel metus nec erat varius cursus vitae sit amet augue. Donec porttitor, urna at volutpat lobortis, urna sem vehicula urna, at euismod felis turpis eget lectus. Vivamus ac dui condimentum neque hendrerit ullamcorper. Donec eu lorem vitae magna lobortis tempor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi non lacus orci. In est tortor, malesuada at varius a, tincidunt a quam. Cras molestie pellentesque sollicitudin.';
   $testArea.addParagraph = function (str) {
     var $p = $('<p>' + str + '</p>');
     $testArea.append($p);
@@ -74,25 +75,46 @@
     strictEqual($testArea.text(), sentence, 'is not affected');
   }));
 
-  test('is awesome', 1, function() {
-    strictEqual(this.elems.awesome().text(), 'awesomeawesomeawesome', 'should be thoroughly awesome');
-  });
+  test('A long sentence' + 'trunkata\'d to 150 words' /* 'is at most 150 words long' */, 1, wrap(function () {
+    // A long sentence
+    var sentence = LIPSUM;
+    $testArea.addParagraph(sentence);
 
-  module('jQuery.awesome');
+    // trunkata'd to 150 words
+    $testArea.trunkata({'words': 150});
 
-  test('is awesome', 1, function() {
-    strictEqual($.awesome(), 'awesome', 'should be thoroughly awesome');
-  });
+    // is at most 150 words long
+    ok($testArea.text().length <= 150, 'is at most 150 words long');
+  }));
 
-  module(':awesome selector', {
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
-  });
+  test('A multi-line paragraph' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, wrap(function () {
+    // A multi-line sentence
+    var sentence = LIPSUM + LIPSUM;
+    $testArea.addParagraph(sentence);
 
-  test('is awesome', 1, function() {
-    // Use deepEqual & .get() when comparing jQuery objects.
-    deepEqual(this.elems.filter(':awesome').get(), this.elems.last().get(), 'knows awesome when it sees it');
-  });
+    // trunkata'd to 2 lines
+    $testArea.trunkata({'lines': 2});
+
+    // is at most 2 lines
+    var lineHeight = $testArea.css('line-height'),
+        twoLines = lineHeight * 2;
+    ok($testArea.css('height') <= twoLines, 'is at most 2 lines');
+  }));
+
+  test('A div with multiple child paragraphs' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, wrap(function () {
+    // A div with multiple child paragraphs
+    var sentence = LIPSUM + LIPSUM;
+    $testArea.addParagraph(sentence);
+    $testArea.addParagraph(sentence);
+    $testArea.addParagraph(sentence);
+
+    // trunkata'd to 2 lines
+    $testArea.trunkata({'lines': 2});
+
+    // is at most 2 lines
+    var lineHeight = $testArea.css('line-height'),
+        twoLines = lineHeight * 2;
+    ok($testArea.css('height') <= twoLines, 'is at most 2 lines');
+  }));
 
 }(jQuery));
