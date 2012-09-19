@@ -46,16 +46,33 @@
       raises(block, [expected], [message])
   */
 
-  module('jQuery#awesome', {
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
-  });
+  module('jquery#trunkata', {});
 
-  test('is chainable', 1, function() {
-    // Not a bad test to run on collection methods.
-    strictEqual(this.elems.awesome(), this.elems, 'should be chaninable');
-  });
+  // Set up test area
+  var $testArea = $('#TEST_AREA');
+  $testArea.addParagraph = function (str) {
+    var $p = $('<p>' + str + '</p>');
+    $testArea.append($p);
+    return this;
+  };
+
+  // Helper method for before/after
+  function wrap(fn) {
+    $testArea.empty();
+    return fn();
+  }
+
+  test('A short sentence trunkata\'d' /* is not affected */, 1, wrap(function () {
+    // A short sentence
+    var sentence = 'Hello world!';
+    $testArea.addParagraph(sentence);
+
+    // trunkata'd
+    $testArea.trunkata();
+
+    // is not affected
+    strictEqual($testArea.text(), sentence, 'is not affected');
+  }));
 
   test('is awesome', 1, function() {
     strictEqual(this.elems.awesome().text(), 'awesomeawesomeawesome', 'should be thoroughly awesome');
