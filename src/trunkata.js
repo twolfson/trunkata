@@ -32,9 +32,9 @@
   var trunkataProto = {
     'trunkata': function () {
       var $item = this.$item;
-      if ($item.html().indexOf('Hello') === -1) {
-        $item.html('abba');
-      }
+      // if ($item.html().indexOf('Hello') === -1) {
+      //   $item.html('abba');
+      // }
     },
     'truncate': function () {
       var args = slice.call(arguments);
