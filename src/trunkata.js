@@ -47,6 +47,41 @@
     return $collection;
   }
 
+  // Binary search algorithm from http://www.nczonline.net/blog/2009/09/01/computer-science-in-javascript-binary-search/
+  // Copyright 2009 Nicholas C. Zakas. All rights reserved.
+  // MIT-Licensed, see source file
+  // Modifications by Todd Wolfson
+  /**
+   * Helper function to get binary search functions
+   * @param {Function} comparator Comparator that returns 0 when equal, -1 when less than, 1 when greater than
+   */
+  // TODO: We could set comparator as the final parameter
+  function binarySearch(comparator) {
+    function binarySearchFn(items, value) {
+        var startIndex  = 0,
+            stopIndex   = items.length - 1,
+            middle      = Math.floor((stopIndex + startIndex)/2);
+
+        while(comparator(value, items[middle]) !== 0 && startIndex < stopIndex){
+
+            //adjust search area
+            if (comparator(value, items[middle]) < 0){
+                stopIndex = middle - 1;
+            } else if (comparator(value, items[middle]) > 0){
+                startIndex = middle + 1;
+            }
+
+            //recalculate middle
+            middle = Math.floor((stopIndex + startIndex)/2);
+        }
+
+        //make sure it's the right value
+        return comparator(value, items[middle]) !== 0 ? -1 : middle;
+    }
+    return binarySearchFn;
+  }
+console.log(binarySearch(function (a, b) { return a === b ? 0 : (a > b ? 1 : -1); })([0,1,2,3,4,5,6,7], 4));
+
   function trunkata(item) {
     var $item = $(item);
     this.$item = $item;
@@ -83,6 +118,8 @@
       var $collection = this.collectContents();
 
       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
+
+
       // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
       // TODO: Collect all of the immediate children of $item as $children
       // TODO: Take the nodes after, if it is not an immediate child of $item, remove it from its parent. if it is an immediate child, remove it and skip over any future nodes that are not immediate children (since they are automatically removed)
