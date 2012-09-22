@@ -121,54 +121,62 @@
 
       // TODO: If we are passing, don't do anything
 
-      // Depth-first traversal and collect each child
-      var $origCollection = this.collectContents();
-console.log($origCollection);
-      // Clone the collection
-      $collection = $origCollection.clone(true, true);
+      // // Depth-first traversal and collect each child
+      // var $origCollection = this.collectContents();
 
-      // TODO: This is temporary but useful for 'getting it work' first
+      // Traverse depth-first reverse
       var lineHeight = getCSSValue($item, 'line-height'),
-          height = getCSSValue($item, 'height');
-
-      function getThinCollection() {
-        var $retVal = $origCollection.clone(true, true),
-            item,
-            i = $retVal.length;
-
-        // Loop over the $retVal in reverse
-        while (i--) {
-          item = $retVal[i];
-
-          // If the item is not in our current collection, remove it (nice because it is reverse depth-first)
-          if (!$collection.is(item)) {
-console.log(item);
-            item.parentNode.removeChild(item);
-          }
+          height = getCSSValue($item, 'height'),
+          isPassing = height <= lineHeight;
+      function recurseFn(elt) {
+        // If we are passing, return
+        if (!isPassing) {
+          var height = getCSSValue($item, 'height');
+          isPassing = height <= lineHeight;
+        }
+        if (isPassing) {
+          return;
         }
 
-        // Return our $retVal
-        return $retVal;
+        // Go down the children of this element
+        var children = elt.childNodes,
+            i = children.length;
+        while (i--) {
+          recurseFn(children[i]);
+        }
+
+        // If we are not passing, remove myself
+        if (!isPassing) {
+          elt.parentNode.removeChild(elt);
+        }
       }
 
-      // TODO: In comparator speak, this would be -1 or 0
-      // TODO: If we meet our requirements, stop
-      while (true) {
-          // Replace the $elt's children with our children
-          $item.empty().append(getThinCollection());
-          height = getCSSValue($item, 'height');
-console.log(height, lineHeight);
-          // If we are at our line-height, stop
-          if (height <= lineHeight) {
-            break;
-          }
-
-          // Otherwise, slice collection by 1
-          $collection = $collection.slice(0, -1);
-          break;
+      // Iterate over each of the children in reverse
+      var item = $item[0],
+          children = item.childNodes,
+          i = children.length;
+      while (i--) {
+        recurseFn(children[i]);
       }
 
-      console.log($collection);
+//       // TODO: In comparator speak, this would be -1 or 0
+//       // TODO: If we meet our requirements, stop
+//       while (true) {
+//           // Replace the $elt's children with our children
+//           $item.empty().append(getThinCollection());
+//           height = getCSSValue($item, 'height');
+// console.log(height, lineHeight);
+//           // If we are at our line-height, stop
+//           if (height <= lineHeight) {
+//             break;
+//           }
+
+//           // Otherwise, slice collection by 1
+//           $collection = $collection.slice(0, -1);
+//           break;
+//       }
+
+//       console.log($collection);
 
 //       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
 //       var indicies = $collection.map(function (i) {
