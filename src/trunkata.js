@@ -250,9 +250,8 @@
 
           elt = elts[m];
 
-          // If this is a text node, linear truncate myself
-          // TODO: Deal with whitespace preservation
-          // TODO: I think it is actually any character of a string -- just no ellipsis on the whitespace (and maybe no punctuation either)
+          // If this is a text node, truncate myself (binary search)
+          // TODO: Allow any kind of 'fillText' (not just hellip)
           var str = elt.nodeValue,
               words = str.split(' '),
               j = words.length;
@@ -267,8 +266,12 @@
           start = 0;
           stop = words.length - 1;
           mid = Math.ceil((start + stop)/2);
+          var wordStr;
           while (start < stop) {
-            elt.nodeValue = words.slice(0, mid).join(' ');
+            // Collect the word, remove and whitespace punctuation from the end
+            wordStr = words.slice(0, mid).join(' ');
+            wordStr = wordStr.replace(/[\s,;:!\?]+$/, '');
+            elt.nodeValue = wordStr;
 
             // If we are under a line, start here
             if (underOneLine()) {
