@@ -89,7 +89,7 @@
   function trunkata(item) {
     var $item = $(item),
         $children = $item.contents(),
-        $childrenClones = $item.clone(true, true);
+        $childrenClones = $children.clone(true, true);
     this.$item = $item;
     this.$children = $children;
     this.$childrenClones = $childrenClones;
