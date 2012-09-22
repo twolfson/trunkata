@@ -35,5 +35,16 @@
 
   <div id="TEST_AREA">
   </div>
+
+  <script src="https://raw.github.com/twolfson/File-Watcher/master/src/watcher.js"></script>
+  <script>
+      (function () {
+         var watcher = new FileWatcher();
+         watcher.addListener(function () {
+           location.reload();
+         });
+         watcher.watch('../src/trunkata.js');
+      }());
+  </script>
 </body>
 </html>

@@ -16,6 +16,14 @@
   // TODO: trunkata('reset')
   // TODO: Manage default options via $.trunkata?
 
+  function lineComparator(maxLines) {
+    function lineCompFn() {
+      var $item = this.$item;
+      // if
+    }
+  return lineCompFn;
+  }
+
   function trunkata(item) {
     var $item = $(item);
     this.$item = $item;
@@ -35,8 +43,33 @@
 
       // TODO: If we have been here before, reset the item's children
       // TODO: What about the children's children? ;_; -- namely TextNodes as children
+      // TODO: Solution -> Use the same closing algorithm as before but with the original set ;)
 
       // TODO: If we are passing, don't do anything
+
+      // Get the children (including text and comment nodes)
+      var $children = $item.contents(),
+          $collection = $();
+
+      // TODO: Move outside of trunkata
+      function buildList($elts) {
+        $elts.each(function () {
+          // jQueyr-ify the elemet
+          var $elt = $(this);
+
+          // Add it to the collection
+          $collection = $collection.add($elt);
+
+          // Walk down its children
+          var $children = $elt.contents();
+
+          // Add them to the list
+          buildList($children);
+        });
+      }
+      buildList($children);
+
+      console.log($collection);
 
       // TODO: Depth-first traversal and collect each child
       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
