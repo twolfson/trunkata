@@ -70,7 +70,7 @@
   }
 
   function getNumericProperty($elt, prop) {
-    var propPx = $testArea.css(prop),
+    var propPx = $elt.css(prop),
         retVal = parseInt(propPx, 10); /* no need for +propPx.replace, woot! */
     return retVal;
   }

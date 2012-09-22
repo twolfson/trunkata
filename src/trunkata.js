@@ -36,7 +36,8 @@
       $collection = $collection.add($elt);
 
       // Walk down its children
-      var $children = $elt.contents();
+      var $children = $elt.children();
+      // var $children = $elt.contents();
 
       // Add them to the list
       var $subcollection = collectContents($children);
@@ -47,6 +48,7 @@
     return $collection;
   }
 
+  // TODO: Expose me
   // Binary search algorithm from http://www.nczonline.net/blog/2009/09/01/computer-science-in-javascript-binary-search/
   // Copyright 2009 Nicholas C. Zakas. All rights reserved.
   // MIT-Licensed, see source file
@@ -77,6 +79,13 @@
       return comparator(value, items[middle]) !== 0 ? -1 : middle;
   }
 
+  // TODO: Expose
+  function getCSSValue($elt, prop) {
+    var propPx = $elt.css(prop),
+        retVal = parseInt(propPx, 10);
+    return retVal;
+  }
+
   function trunkata(item) {
     var $item = $(item);
     this.$item = $item;
@@ -86,7 +95,8 @@
     'collectContents': function () {
       // Get the children (including text and comment nodes)
        var $item = this.$item,
-           $children = $item.contents(),
+           $children = $item.children(),
+           // $children = $item.contents(),
            $collection = collectContents($children);
 
       return $collection;
@@ -100,7 +110,8 @@
      */
     'trunkata': function (params) {
       var $item = this.$item,
-          $children = $item.contents();
+          $children = $item.children();
+          // $children = $item.contents();
 
       // TODO: Use utility method (options/params) to save params for later?
 
@@ -111,44 +122,53 @@
       // TODO: If we are passing, don't do anything
 
       // Depth-first traversal and collect each child
-      var $collection = this.collectContents();
-
+      var $origCollection = this.collectContents();
+console.log($origCollection);
       // Clone the collection
-      $collection = $collection.clone(true, true);
+      $collection = $origCollection.clone(true, true);
 
-      function selectTopElements($elts, index) {
-        var $retElts = $(),
-            seenChild = false;
-        $elts.each(function (i) {
-          var $this = $(this);
+      // TODO: This is temporary but useful for 'getting it work' first
+      var lineHeight = getCSSValue($item, 'line-height'),
+          height = getCSSValue($item, 'height');
 
-          // If the item is acceptable, keep it
-          if (i <= index) {
-            $retElts = $retElts.add($this);
-          } else {
-          // Otherwise
-            // If we have not seen the first child
-            if (!seenChild) {
-              // If this is a child, save as such
-              if ($colleciton.is($this)) {
-                seenChild = true;
-              }
+      function getThinCollection() {
+        var $retVal = $origCollection.clone(true, true),
+            item,
+            i = $retVal.length;
 
-              // Remove it
-              $this.remove();
-            } else {
-            // Otherwise, if this is a child, remove it
-              if ($collection.is($this)) {
-                $this.remove();
-              }
-            }
+        // Loop over the $retVal in reverse
+        while (i--) {
+          item = $retVal[i];
+
+          // If the item is not in our current collection, remove it (nice because it is reverse depth-first)
+          if (!$collection.is(item)) {
+console.log(item);
+            item.parentNode.removeChild(item);
           }
-        });
+        }
 
-        // Return the collection
-        return $retElts;
+        // Return our $retVal
+        return $retVal;
       }
-      selectTopElements($elts, 2);
+
+      // TODO: In comparator speak, this would be -1 or 0
+      // TODO: If we meet our requirements, stop
+      while (true) {
+          // Replace the $elt's children with our children
+          $item.empty().append(getThinCollection());
+          height = getCSSValue($item, 'height');
+console.log(height, lineHeight);
+          // If we are at our line-height, stop
+          if (height <= lineHeight) {
+            break;
+          }
+
+          // Otherwise, slice collection by 1
+          $collection = $collection.slice(0, -1);
+          break;
+      }
+
+      console.log($collection);
 
 //       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
 //       var indicies = $collection.map(function (i) {
