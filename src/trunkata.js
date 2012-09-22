@@ -168,67 +168,57 @@
       while (i--) {
         recurse2(children[i]);
       }
-console.log(elts);
 
       // Traverse depth-first reverse
       var isPassing = underOneLine();
-      function comparator(elt) {
-// console.log('x', elt);
+      function comparator(index) {
+        var elt = elts[index];
         // If we are passing, return
-        isPassing = isPassing || underOneLine();
         if (isPassing) {
           return true;
         }
-// console.log('y', elt);
 
-        // If we are not passing, remove myself
-        if (!isPassing) {
-// console.log('z', elt, elt.nodeType);
-          // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
-          // If this is a text node, linear truncate myself
-console.log(elt, elt.nodeType);
-          if (elt.nodeType === 3) {
-            // TODO: Deal with whitespace preservation
-            // TODO: I think it is actually any character of a string -- just no ellipsis on the whitespace (and maybe no punctuation either)
-            var str = elt.nodeValue,
-                words = str.split(' '),
-                j = words.length;
+        // Remove myself
+        // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
+        // If this is a text node, linear truncate myself
+        if (elt.nodeType === 3) {
+          // TODO: Deal with whitespace preservation
+          // TODO: I think it is actually any character of a string -- just no ellipsis on the whitespace (and maybe no punctuation either)
+          var str = elt.nodeValue,
+              words = str.split(' '),
+              j = words.length;
 
-            // Temporarily append an ellipsis
-            var ellipsis = document.createElement('span');
-            ellipsis.className = 'trunkata-ellipsis';
-            ellipsis.innerHTML = '&hellip;';
-            elt.parentNode.appendChild(ellipsis);
-            for (; j >= 1; j--) {
-              elt.nodeValue = words.slice(0, j).join(' ');
-console.log('z', elt, elt.nodeValue);
-              isPassing = isPassing || underOneLine();
-              if (isPassing) {
-                return true;
-              }
+          // Temporarily append an ellipsis
+          var ellipsis = document.createElement('span');
+          ellipsis.className = 'trunkata-ellipsis';
+          ellipsis.innerHTML = '&hellip;';
+          elt.parentNode.appendChild(ellipsis);
+          for (; j >= 1; j--) {
+            elt.nodeValue = words.slice(0, j).join(' ');
+
+            isPassing = isPassing || underOneLine();
+            if (isPassing) {
+              return true;
             }
-// console.log('mmm');
-            // We could not do anything with the ellipsis attached, give up
-            elt.parentNode.removeChild(ellipsis);
           }
 
-          elt.parentNode.removeChild(elt);
-
-          isPassing = isPassing || underOneLine();
+          // We could not do anything with the ellipsis attached, give up
+          elt.parentNode.removeChild(ellipsis);
         }
 
+        elt.parentNode.removeChild(elt);
+
         // Return passing status
+        isPassing = isPassing || underOneLine();
         return isPassing;
       }
 
       // Checking time (linear first run -- will do binary search next)
       var k = 0,
           len = elts.length,
-          elt,
           passes;
       for (; k < len; k++) {
-        elt = elts[k];
-        passes = comparator(elt);
+        passes = comparator(k);
         if (passes) {
           break;
         }
