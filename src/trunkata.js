@@ -152,12 +152,12 @@
 
       // TODO: Logic for different comparators
       // TODO: Make 'getComparator' exposable function
+      // TODO: Rename underOneLine -_-
       var lines = params.lines,
           words = params.words;
       if (lines !== undefined) {
         underOneLine = getLineComparator($item, lines);
       } else if (words !== undefined) {
-console.log(words);
         underOneLine = getWordComparator($item, words);
       } else {
         underOneLine = getLineComparator($item, 1);
