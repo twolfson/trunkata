@@ -129,9 +129,10 @@
           height = getCSSValue($item, 'height'),
           isPassing = height <= lineHeight;
       function recurseFn(elt) {
+        var height;
         // If we are passing, return
         if (!isPassing) {
-          var height = getCSSValue($item, 'height');
+          height = getCSSValue($item, 'height');
           isPassing = height <= lineHeight;
         }
         if (isPassing) {
@@ -147,7 +148,13 @@
 
         // If we are not passing, remove myself
         if (!isPassing) {
+          // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
+          // If this is a text node, linear truncate myself
+
           elt.parentNode.removeChild(elt);
+
+          height = getCSSValue($item, 'height');
+          isPassing = height <= lineHeight;
         }
       }
 
