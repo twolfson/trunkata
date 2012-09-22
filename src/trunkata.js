@@ -55,32 +55,27 @@
    * Helper function to get binary search functions
    * @param {Function} comparator Comparator that returns 0 when equal, -1 when less than, 1 when greater than
    */
-  // TODO: We could set comparator as the final parameter
-  function binarySearch(comparator) {
-    function binarySearchFn(items, value) {
-        var startIndex  = 0,
-            stopIndex   = items.length - 1,
-            middle      = Math.floor((stopIndex + startIndex)/2);
+  function binarySearch(items, value, comparator) {
+      var startIndex  = 0,
+          stopIndex   = items.length - 1,
+          middle      = Math.floor((stopIndex + startIndex)/2);
 
-        while(comparator(value, items[middle]) !== 0 && startIndex < stopIndex){
+      while(comparator(value, items[middle]) !== 0 && startIndex < stopIndex){
 
-            //adjust search area
-            if (comparator(value, items[middle]) < 0){
-                stopIndex = middle - 1;
-            } else if (comparator(value, items[middle]) > 0){
-                startIndex = middle + 1;
-            }
+          //adjust search area
+          if (comparator(value, items[middle]) < 0){
+              stopIndex = middle - 1;
+          } else if (comparator(value, items[middle]) > 0){
+              startIndex = middle + 1;
+          }
 
-            //recalculate middle
-            middle = Math.floor((stopIndex + startIndex)/2);
-        }
+          //recalculate middle
+          middle = Math.floor((stopIndex + startIndex)/2);
+      }
 
-        //make sure it's the right value
-        return comparator(value, items[middle]) !== 0 ? -1 : middle;
-    }
-    return binarySearchFn;
+      //make sure it's the right value
+      return comparator(value, items[middle]) !== 0 ? -1 : middle;
   }
-console.log(binarySearch(function (a, b) { return a === b ? 0 : (a > b ? 1 : -1); })([0,1,2,3,4,5,6,7], 4));
 
   function trunkata(item) {
     var $item = $(item);
@@ -104,7 +99,8 @@ console.log(binarySearch(function (a, b) { return a === b ? 0 : (a > b ? 1 : -1)
      * @returns {this}
      */
     'trunkata': function (params) {
-      var $item = this.$item;
+      var $item = this.$item,
+          $children = $item.contents();
 
       // TODO: Use utility method (options/params) to save params for later?
 
@@ -117,8 +113,31 @@ console.log(binarySearch(function (a, b) { return a === b ? 0 : (a > b ? 1 : -1)
       // Depth-first traversal and collect each child
       var $collection = this.collectContents();
 
-      // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
+//       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
+//       var indicies = $collection.map(function (i) {
+//         return i;
+//       });
+//       var index = binarySearch(indicies, {lines: 1}, function (params, index) {
+//         // Slice our collection, replace $item's contents and get the line-height
+//         var $slice = $collection.slice(index);
+// // TODO: Need to coerce to children only junk
+//         $item.empty().append($slice);
 
+//         var lineHeight = $item.css('line-height'),
+//             height = $item.css('height');
+//         console.log(lineHeight, height);
+
+//         var retVal = -1;
+//         // If we are on the line-height, return 0? -- no it should be 'a maximum but not *the* maximum'
+//         if (lineHeight === height) {
+//           retVal = 0;
+//         } else if (lineHeight > height) {
+//           retVal = 1;
+//         }
+
+//         // Return retVal
+//         return retVal;
+//       });
 
       // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
       // TODO: Collect all of the immediate children of $item as $children
