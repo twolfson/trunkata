@@ -87,11 +87,27 @@
   }
 
   function trunkata(item) {
-    var $item = $(item);
+    var $item = $(item),
+        $children = $item.contents(),
+        $childrenClones = $item.clone(true, true);
     this.$item = $item;
+    this.$children = $children;
+    this.$childrenClones = $childrenClones;
   }
   trunkata.collectContents = collectContents;
   var trunkataProto = {
+    'reset': function () {
+      // Get the children clones and clone them again
+      var $item = this.$item,
+          $childrenClones = this.$childrenClones(),
+          $newChildren = $childrenClones.clone(true, true);
+
+      // Empty out the item and add the new childrem
+      $item.empty().append($newChildren);
+
+      // Return this
+      return this;
+    },
     'collectContents': function () {
       // Get the children (including text and comment nodes)
        var $item = this.$item,
@@ -113,6 +129,13 @@
           $children = $item.children();
           // $children = $item.contents();
 
+      function underOneLine() {
+        var lineHeight = getCSSValue($item, 'line-height'),
+            height = getCSSValue($item, 'height'),
+            isPassing = height <= lineHeight;
+        return isPassing;
+      }
+
       // TODO: Use utility method (options/params) to save params for later?
 
       // TODO: If we have been here before, reset the item's children
@@ -125,16 +148,10 @@
       // var $origCollection = this.collectContents();
 
       // Traverse depth-first reverse
-      var lineHeight = getCSSValue($item, 'line-height'),
-          height = getCSSValue($item, 'height'),
-          isPassing = height <= lineHeight;
+      var isPassing = underOneLine();
       function recurseFn(elt) {
-        var height;
         // If we are passing, return
-        if (!isPassing) {
-          height = getCSSValue($item, 'height');
-          isPassing = height <= lineHeight;
-        }
+        isPassing = isPassing || underOneLine();
         if (isPassing) {
           return;
         }
@@ -164,9 +181,7 @@
             for (; j >= 1; j--) {
               elt.nodeValue = words.slice(0, j).join(' ');
 
-              height = getCSSValue($item, 'height');
-              isPassing = height <= lineHeight;
-
+              isPassing = isPassing || underOneLine();
               if (isPassing) {
                 return;
               }
@@ -178,8 +193,7 @@
 
           elt.parentNode.removeChild(elt);
 
-          height = getCSSValue($item, 'height');
-          isPassing = height <= lineHeight;
+          isPassing = isPassing || underOneLine();
         }
       }
 
