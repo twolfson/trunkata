@@ -215,16 +215,38 @@
       // If we are not passing
       var isPassing = underOneLine();
       if (!isPassing) {
-        var k = 0,
-            len = elts.length,
+        // NOTE: Since we have a reverse loop -- lowest is best
+        var start = 0,
+            stop = elts.length - 1,
+            mid = Math.floor((start + stop)/2),
             passes;
-        // Checking time (linear first run -- will do binary search next)
-        for (; k < len; k++) {
-          passes = comparator(k);
+        while (start < stop) {
+          passes = comparator(mid);
+
+          // If mid passes, move stop to here
           if (passes) {
-            break;
+            stop = mid;
+          } else {
+          // Otherwise, move start to mid + 1
+            start = mid + 1;
           }
+
+          // Recalculate middle
+          mid = Math.floor((start + stop)/2);
         }
+
+        var k = Math.min(start, stop);
+
+        // var k = 0,
+        //     len = elts.length,
+        //     passes;
+        // // Checking time (linear first run -- will do binary search next)
+        // for (; k < len; k++) {
+        //   passes = comparator(k);
+        //   if (passes) {
+        //     break;
+        //   }
+        // }
 
         // Find the last text node (inclusive) before our good index (remember: leaf -> root is how our array is)
         var whenRemovedIsPassing = k,
