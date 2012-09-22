@@ -99,7 +99,7 @@
     'reset': function () {
       // Get the children clones and clone them again
       var $item = this.$item,
-          $childrenClones = this.$childrenClones(),
+          $childrenClones = this.$childrenClones,
           $newChildren = $childrenClones.clone(true, true);
 
       // Empty out the item and add the new childrem
@@ -126,14 +126,14 @@
      */
     'trunkata': function (params) {
       var $item = this.$item,
-          $children = $item.children();
+          $children = $item.children(),
+          that = this;
           // $children = $item.contents();
 
       function underOneLine() {
         var lineHeight = getCSSValue($item, 'line-height'),
             height = getCSSValue($item, 'height'),
             isPassing = height <= lineHeight;
-// console.log(height, lineHeight);
         return isPassing;
       }
 
@@ -148,35 +148,68 @@
       // // Depth-first traversal and collect each child
       // var $origCollection = this.collectContents();
 
-      // Do a reverse DFT but this time outside of jQuery (this is exclusively for the length)
-      var elts = [];
-      function recurse2(elt) {
-        // Keep on diving
-        var item = elt,
-            children = elt.childNodes,
+      function collectTree() {
+        // Do a reverse DFT but this time outside of jQuery (this is exclusively for the length)
+        var elts = [];
+        function recurse2(elt) {
+          // Keep on diving
+          var item = elt,
+              children = elt.childNodes,
+              i = children.length;
+          while (i--) {
+            recurse2(children[i]);
+          }
+
+          // Add the elt to the array
+          elts.push(elt);
+        }
+
+        // Start iterating over the elemtns in reverse
+        var item = $item[0],
+            children = item.childNodes,
             i = children.length;
         while (i--) {
           recurse2(children[i]);
         }
 
-        // Add the elt to the array
-        elts.push(elt);
+        // Return our collection
+        return elts;
       }
-      var item = $item[0],
-          children = item.childNodes,
-          i = children.length;
-      while (i--) {
-        recurse2(children[i]);
+      var elts = collectTree();
+
+      function resetAndCollect() {
+        that.reset();
+        elts = collectTree();
+      }
+
+      function resetCollectAndEat(index) {
+        resetAndCollect();
+
+        var i = 0,
+            len = index,
+            elt;
+
+        // REMEMBER: THIS IS A REVERSE DFS TREE SO WE ARE GOING LEAF -> ROOT
+        for (; i < len; i++) {
+          elt = elts[i];
+          elt.parentNode.removeChild(elt);
+        }
       }
 
       // Traverse depth-first reverse
       var isPassing = underOneLine();
       function comparator(index) {
-        var elt = elts[index];
         // If we are passing, return
         if (isPassing) {
           return true;
         }
+
+        // Reset collect and each up to index
+        resetCollectAndEat(index);
+
+        // Find the element we are truncating
+        var elt = elts[index];
+
 
         // Remove myself
         // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
