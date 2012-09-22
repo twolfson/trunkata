@@ -113,6 +113,43 @@
       // Depth-first traversal and collect each child
       var $collection = this.collectContents();
 
+      // Clone the collection
+      $collection = $collection.clone(true, true);
+
+      function selectTopElements($elts, index) {
+        var $retElts = $(),
+            seenChild = false;
+        $elts.each(function (i) {
+          var $this = $(this);
+
+          // If the item is acceptable, keep it
+          if (i <= index) {
+            $retElts = $retElts.add($this);
+          } else {
+          // Otherwise
+            // If we have not seen the first child
+            if (!seenChild) {
+              // If this is a child, save as such
+              if ($colleciton.is($this)) {
+                seenChild = true;
+              }
+
+              // Remove it
+              $this.remove();
+            } else {
+            // Otherwise, if this is a child, remove it
+              if ($collection.is($this)) {
+                $this.remove();
+              }
+            }
+          }
+        });
+
+        // Return the collection
+        return $retElts;
+      }
+      selectTopElements($elts, 2);
+
 //       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
 //       var indicies = $collection.map(function (i) {
 //         return i;
