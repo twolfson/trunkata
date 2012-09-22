@@ -133,6 +133,7 @@
         var lineHeight = getCSSValue($item, 'line-height'),
             height = getCSSValue($item, 'height'),
             isPassing = height <= lineHeight;
+// console.log(height, lineHeight);
         return isPassing;
       }
 
@@ -147,28 +148,48 @@
       // // Depth-first traversal and collect each child
       // var $origCollection = this.collectContents();
 
+      // Do a reverse DFT but this time outside of jQuery (this is exclusively for the length)
+      var elts = [];
+      function recurse2(elt) {
+        // Keep on diving
+        var item = elt,
+            children = elt.childNodes,
+            i = children.length;
+        while (i--) {
+          recurse2(children[i]);
+        }
+
+        // Add the elt to the array
+        elts.push(elt);
+      }
+      var item = $item[0],
+          children = item.childNodes,
+          i = children.length;
+      while (i--) {
+        recurse2(children[i]);
+      }
+console.log(elts);
+
       // Traverse depth-first reverse
       var isPassing = underOneLine();
-      function recurseFn(elt) {
+      function comparator(elt) {
+// console.log('x', elt);
         // If we are passing, return
         isPassing = isPassing || underOneLine();
         if (isPassing) {
-          return;
+          return true;
         }
-
-        // Go down the children of this element
-        var children = elt.childNodes,
-            i = children.length;
-        while (i--) {
-          recurseFn(children[i]);
-        }
+// console.log('y', elt);
 
         // If we are not passing, remove myself
         if (!isPassing) {
+// console.log('z', elt, elt.nodeType);
           // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
           // If this is a text node, linear truncate myself
+console.log(elt, elt.nodeType);
           if (elt.nodeType === 3) {
             // TODO: Deal with whitespace preservation
+            // TODO: I think it is actually any character of a string -- just no ellipsis on the whitespace (and maybe no punctuation either)
             var str = elt.nodeValue,
                 words = str.split(' '),
                 j = words.length;
@@ -180,13 +201,13 @@
             elt.parentNode.appendChild(ellipsis);
             for (; j >= 1; j--) {
               elt.nodeValue = words.slice(0, j).join(' ');
-
+console.log('z', elt, elt.nodeValue);
               isPassing = isPassing || underOneLine();
               if (isPassing) {
-                return;
+                return true;
               }
             }
-
+// console.log('mmm');
             // We could not do anything with the ellipsis attached, give up
             elt.parentNode.removeChild(ellipsis);
           }
@@ -195,15 +216,31 @@
 
           isPassing = isPassing || underOneLine();
         }
+
+        // Return passing status
+        return isPassing;
       }
 
-      // Iterate over each of the children in reverse
-      var item = $item[0],
-          children = item.childNodes,
-          i = children.length;
-      while (i--) {
-        recurseFn(children[i]);
+      // Checking time (linear first run -- will do binary search next)
+      var k = 0,
+          len = elts.length,
+          elt,
+          passes;
+      for (; k < len; k++) {
+        elt = elts[k];
+        passes = comparator(elt);
+        if (passes) {
+          break;
+        }
       }
+
+      // // Iterate over each of the children in reverse
+      // var item = $item[0],
+      //     children = item.childNodes,
+      //     i = children.length;
+      // while (i--) {
+      //   recurseFn(children[i]);
+      // }
 
 //       // TODO: In comparator speak, this would be -1 or 0
 //       // TODO: If we meet our requirements, stop
