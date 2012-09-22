@@ -197,24 +197,55 @@
       }
 
       // Traverse depth-first reverse
-      var isPassing = underOneLine();
       function comparator(index) {
-        // If we are passing, return
-        if (isPassing) {
-          return true;
-        }
-
         // Reset collect and each up to index
         resetCollectAndEat(index);
 
         // Find the element we are truncating
         var elt = elts[index];
 
-
         // Remove myself
-        // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
-        // If this is a text node, linear truncate myself
-        if (elt.nodeType === 3) {
+        elt.parentNode.removeChild(elt);
+
+        // Return passing status
+        var isPassing = underOneLine();
+        return isPassing;
+      }
+
+      // If we are not passing
+      var isPassing = underOneLine();
+      if (!isPassing) {
+        var k = 0,
+            len = elts.length,
+            passes;
+        // Checking time (linear first run -- will do binary search next)
+        for (; k < len; k++) {
+          passes = comparator(k);
+          if (passes) {
+            break;
+          }
+        }
+
+        // Find the last text node (inclusive) before our good index (remember: leaf -> root is how our array is)
+        var whenRemovedIsPassing = k,
+            elt,
+            m = whenRemovedIsPassing + 1;
+        while (m--) {
+          elt = elts[m];
+          if (elt.nodeType === 3) {
+            break;
+          }
+        }
+
+        // If there was a text node
+        var mWasUsed = false;
+        if (m >= 0) {
+          // Reset and eat to this index
+          resetCollectAndEat(m);
+
+          elt = elts[m];
+
+          // If this is a text node, linear truncate myself
           // TODO: Deal with whitespace preservation
           // TODO: I think it is actually any character of a string -- just no ellipsis on the whitespace (and maybe no punctuation either)
           var str = elt.nodeValue,
@@ -229,31 +260,16 @@
           for (; j >= 1; j--) {
             elt.nodeValue = words.slice(0, j).join(' ');
 
-            isPassing = isPassing || underOneLine();
-            if (isPassing) {
-              return true;
+            if (underOneLine()) {
+              mWasUsed = true;
+              break;
             }
           }
-
-          // We could not do anything with the ellipsis attached, give up
-          elt.parentNode.removeChild(ellipsis);
         }
 
-        elt.parentNode.removeChild(elt);
-
-        // Return passing status
-        isPassing = isPassing || underOneLine();
-        return isPassing;
-      }
-
-      // Checking time (linear first run -- will do binary search next)
-      var k = 0,
-          len = elts.length,
-          passes;
-      for (; k < len; k++) {
-        passes = comparator(k);
-        if (passes) {
-          break;
+        // If mWasNotUsed, reset and eat to goodIndex
+        if (!mWasUsed) {
+          resetCollectAndEat(whenRemovedIsPassing);
         }
       }
 
