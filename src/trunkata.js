@@ -279,14 +279,39 @@
           ellipsis.className = 'trunkata-ellipsis';
           ellipsis.innerHTML = '&hellip;';
           elt.parentNode.appendChild(ellipsis);
-          for (; j >= 1; j--) {
-            elt.nodeValue = words.slice(0, j).join(' ');
 
+          // Binary search for best amount of words
+          start = 0;
+          stop = words.length - 1;
+          mid = Math.ceil((start + stop)/2);
+          while (start < stop) {
+            elt.nodeValue = words.slice(0, mid).join(' ');
+
+            // If we are under a line, start here
             if (underOneLine()) {
-              mWasUsed = true;
-              break;
+              start = mid;
+            } else {
+            // Otherwise, we are over a line and I want to be under this many words (mid - 1)
+              stop = mid - 1;
             }
+
+            // Recalculate middle
+            mid = Math.ceil((start + stop)/2);
           }
+
+          // If mid is not 0, mark mWasUsed
+          if (mid > 0) {
+            mWasUsed = true;
+          }
+
+          // for (; j >= 1; j--) {
+          //   elt.nodeValue = words.slice(0, j).join(' ');
+
+          //   if (underOneLine()) {
+          //     mWasUsed = true;
+          //     break;
+          //   }
+          // }
         }
 
         // If mWasNotUsed, reset and eat to goodIndex
