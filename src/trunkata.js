@@ -155,7 +155,13 @@
             var str = elt.nodeValue,
                 words = str.split(' '),
                 j = words.length;
-            while (j--) {
+
+            // Temporarily append an ellipsis
+            var ellipsis = document.createElement('span');
+            ellipsis.className = 'trunkata-ellipsis';
+            ellipsis.innerHTML = '&hellip;';
+            elt.parentNode.appendChild(ellipsis);
+            for (; j >= 1; j--) {
               elt.nodeValue = words.slice(0, j).join(' ');
 
               height = getCSSValue($item, 'height');
@@ -165,6 +171,9 @@
                 return;
               }
             }
+
+            // We could not do anything with the ellipsis attached, give up
+            elt.parentNode.removeChild(ellipsis);
           }
 
           elt.parentNode.removeChild(elt);
