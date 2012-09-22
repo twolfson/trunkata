@@ -24,11 +24,43 @@
   return lineCompFn;
   }
 
+  function collectContents($elts) {
+    var $collection = $();
+
+    // Iterate over each of the elements
+    $elts.each(function () {
+      // jQueyr-ify the elemet
+      var $elt = $(this);
+
+      // Add it to the collection
+      $collection = $collection.add($elt);
+
+      // Walk down its children
+      var $children = $elt.contents();
+
+      // Add them to the list
+      var $subcollection = collectContents($children);
+      $collection = $collection.add($subcollection);
+    });
+
+    // Return the collection
+    return $collection;
+  }
+
   function trunkata(item) {
     var $item = $(item);
     this.$item = $item;
   }
+  trunkata.collectContents = collectContents;
   var trunkataProto = {
+    'collectContents': function () {
+      // Get the children (including text and comment nodes)
+       var $item = this.$item,
+           $children = $item.contents(),
+           $collection = collectContents($children);
+
+      return $collection;
+    },
     /**
      * Truncate your DOM with proper form
      * @param {Object} params Parameters to use for truncating
@@ -47,31 +79,9 @@
 
       // TODO: If we are passing, don't do anything
 
-      // Get the children (including text and comment nodes)
-      var $children = $item.contents(),
-          $collection = $();
+      // Depth-first traversal and collect each child
+      var $collection = this.collectContents();
 
-      // TODO: Move outside of trunkata
-      function buildList($elts) {
-        $elts.each(function () {
-          // jQueyr-ify the elemet
-          var $elt = $(this);
-
-          // Add it to the collection
-          $collection = $collection.add($elt);
-
-          // Walk down its children
-          var $children = $elt.contents();
-
-          // Add them to the list
-          buildList($children);
-        });
-      }
-      buildList($children);
-
-      console.log($collection);
-
-      // TODO: Depth-first traversal and collect each child
       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
       // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
       // TODO: Collect all of the immediate children of $item as $children
