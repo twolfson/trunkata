@@ -17,12 +17,37 @@
   // TODO: Manage default options via $.trunkata?
   // TODO: More comparators -- width, height
 
-  function lineComparator(maxLines) {
-    function lineCompFn() {
-      var $item = this.$item;
-      // if
+  // TODO: Expose
+  function getCSSValue($elt, prop) {
+    var propPx = $elt.css(prop),
+        retVal = parseInt(propPx, 10);
+    return retVal;
+  }
+
+  // TODO: Expose
+  function getLineComparator($item, maxLines) {
+    // Get the line-height statistics now
+    var lineHeight = getCSSValue($item, 'line-height'),
+        maxHeight = lineHeight * maxLines;
+
+    // Generate a comparator function
+    function lineComparator() {
+      var height = getCSSValue($item, 'height'),
+          isPassing = height <= maxHeight;
+      return isPassing;
     }
-  return lineCompFn;
+    return lineComparator;
+  }
+
+  function getWordComparator($item, maxWords) {
+    // Generate a comparator function
+    function wordComparator() {
+      var text = $item.text(),
+          words = text.split(/\s+/),
+          isPassing = words.length <= maxWords;
+      return isPassing;
+    }
+    return wordComparator;
   }
 
   function collectContents($elts) {
@@ -80,13 +105,6 @@
       return comparator(value, items[middle]) !== 0 ? -1 : middle;
   }
 
-  // TODO: Expose
-  function getCSSValue($elt, prop) {
-    var propPx = $elt.css(prop),
-        retVal = parseInt(propPx, 10);
-    return retVal;
-  }
-
   function trunkata(item) {
     var $item = $(item),
         $children = $item.contents(),
@@ -129,11 +147,20 @@
       var $item = this.$item,
           that = this;
 
-      function underOneLine() {
-        var lineHeight = getCSSValue($item, 'line-height'),
-            height = getCSSValue($item, 'height'),
-            isPassing = height <= lineHeight;
-        return isPassing;
+      // Fallback params
+      params = params || {'lines': 1};
+
+      // TODO: Logic for different comparators
+      // TODO: Make 'getComparator' exposable function
+      var lines = params.lines,
+          words = params.words;
+      if (lines !== undefined) {
+        underOneLine = getLineComparator($item, lines);
+      } else if (words !== undefined) {
+console.log(words);
+        underOneLine = getWordComparator($item, words);
+      } else {
+        underOneLine = getLineComparator($item, 1);
       }
 
       // TODO: Use utility method (options/params) to save params for later?
@@ -313,8 +340,8 @@
     var args;
     // If the method is not a string, fallback to 'trunkata' and slice all the arguments
     if (typeof method !== 'string') {
-      method = 'trunkata';
       args = slice.call(arguments);
+      method = 'trunkata';
     } else {
     // Otherwise, slice everything except method
       args = slice.call(arguments, 1);

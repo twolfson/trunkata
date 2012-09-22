@@ -91,16 +91,16 @@
     strictEqual($testArea.text(), sentence, 'is not affected');
   });
 
-  test('A long sentence' + 'trunkata\'d to 150 words' /* 'is at most 150 words long' */, 1, function () { before();
+  test('A long sentence' + 'trunkata\'d to 50 words' /* 'is at most 50 words long' */, 1, function () { before();
     // A long sentence
     var sentence = LIPSUM;
     $testArea.addParagraph(sentence);
 
-    // trunkata'd to 150 words
-    $testArea.trunkata({'words': 150});
+    // trunkata'd to 50 words
+    $testArea.trunkata({'words': 50});
 
-    // is at most 150 words long
-    ok($testArea.text().length <= 150, 'is at most 150 words long');
+    // is at most 50 words long
+    ok($testArea.text().split(' ').length <= 50, 'is at most 50 words long');
   });
 
   test('A multi-line paragraph' + 'trunkata\'d to 2 lines' /* 'is at most 2 lines' */, 1, function () {  before();
