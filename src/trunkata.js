@@ -150,6 +150,22 @@
         if (!isPassing) {
           // TODO: As mentioned before, this can be optimized since this will only work if it is the last text node that does not result being <= lineHeight
           // If this is a text node, linear truncate myself
+          if (elt.nodeType === 3) {
+            // TODO: Deal with whitespace preservation
+            var str = elt.nodeValue,
+                words = str.split(' '),
+                j = words.length;
+            while (j--) {
+              elt.nodeValue = words.slice(0, j).join(' ');
+
+              height = getCSSValue($item, 'height');
+              isPassing = height <= lineHeight;
+
+              if (isPassing) {
+                return;
+              }
+            }
+          }
 
           elt.parentNode.removeChild(elt);
 
