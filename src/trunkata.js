@@ -14,27 +14,38 @@
   // TODO: Cusotm value -- e.g. &raquo; over &hellip;
   // TODO: Eventually implement trunk8's left, center, right x_x
   // TODO: trunkata('reset')
+  // TODO: Manage default options via $.trunkata?
+
   function trunkata(item) {
     var $item = $(item);
     this.$item = $item;
-
-    // TODO: If we have been here before, reset the item's children
-
-    // TODO: If we are passing, don't do anything
-
-    // TODO: Depth-first traversal and collect each child
-    // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
-    // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
-    // TODO: Collect all of the immediate children of $item as $children
-    // TODO: Take the nodes after, if it is not an immediate child of $item, remove it from its parent. if it is an immediate child, remove it and skip over any future nodes that are not immediate children (since they are automatically removed)
-    // TODO: Thank you, have a nice day!
   }
   var trunkataProto = {
-    'trunkata': function () {
+    /**
+     * Truncate your DOM with proper form
+     * @param {Object} params Parameters to use for truncating
+     * @param {Number} [params.lines=1]  Truncate item until we are at most `params.lines` tall.
+     * @param {Number} [params.words] If provided (and lines is not), truncate elements until we have `params.words` left.
+     * @returns {this}
+     */
+    'trunkata': function (params) {
       var $item = this.$item;
-      // if ($item.html().indexOf('Hello') === -1) {
-      //   $item.html('abba');
-      // }
+
+      // TODO: Use utility method (options/params) to save params for later?
+
+      // TODO: If we have been here before, reset the item's children
+      // TODO: What about the children's children? ;_; -- namely TextNodes as children
+
+      // TODO: If we are passing, don't do anything
+
+      // TODO: Depth-first traversal and collect each child
+      // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
+      // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
+      // TODO: Collect all of the immediate children of $item as $children
+      // TODO: Take the nodes after, if it is not an immediate child of $item, remove it from its parent. if it is an immediate child, remove it and skip over any future nodes that are not immediate children (since they are automatically removed)
+
+      // Thank you, have a nice day!
+      return this;
     },
     'truncate': function () {
       var args = slice.call(arguments);
