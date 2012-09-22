@@ -126,9 +126,7 @@
      */
     'trunkata': function (params) {
       var $item = this.$item,
-          $children = $item.children(),
           that = this;
-          // $children = $item.contents();
 
       function underOneLine() {
         var lineHeight = getCSSValue($item, 'line-height'),
@@ -138,10 +136,6 @@
       }
 
       // TODO: Use utility method (options/params) to save params for later?
-
-      // TODO: If we have been here before, reset the item's children
-      // TODO: What about the children's children? ;_; -- namely TextNodes as children
-      // TODO: Solution -> Use the same closing algorithm as before but with the original set ;)
 
       // TODO: If we are passing, don't do anything
 
@@ -237,17 +231,6 @@
 
         var k = Math.min(start, stop);
 
-        // var k = 0,
-        //     len = elts.length,
-        //     passes;
-        // // Checking time (linear first run -- will do binary search next)
-        // for (; k < len; k++) {
-        //   passes = comparator(k);
-        //   if (passes) {
-        //     break;
-        //   }
-        // }
-
         // Find the last text node (inclusive) before our good index (remember: leaf -> root is how our array is)
         var whenRemovedIsPassing = k,
             elt,
@@ -303,15 +286,6 @@
           if (mid > 0) {
             mWasUsed = true;
           }
-
-          // for (; j >= 1; j--) {
-          //   elt.nodeValue = words.slice(0, j).join(' ');
-
-          //   if (underOneLine()) {
-          //     mWasUsed = true;
-          //     break;
-          //   }
-          // }
         }
 
         // If mWasNotUsed, reset and eat to goodIndex
@@ -320,62 +294,6 @@
         }
       }
 
-      // // Iterate over each of the children in reverse
-      // var item = $item[0],
-      //     children = item.childNodes,
-      //     i = children.length;
-      // while (i--) {
-      //   recurseFn(children[i]);
-      // }
-
-//       // TODO: In comparator speak, this would be -1 or 0
-//       // TODO: If we meet our requirements, stop
-//       while (true) {
-//           // Replace the $elt's children with our children
-//           $item.empty().append(getThinCollection());
-//           height = getCSSValue($item, 'height');
-// console.log(height, lineHeight);
-//           // If we are at our line-height, stop
-//           if (height <= lineHeight) {
-//             break;
-//           }
-
-//           // Otherwise, slice collection by 1
-//           $collection = $collection.slice(0, -1);
-//           break;
-//       }
-
-//       console.log($collection);
-
-//       // TODO: Do a binary search where the right-most node (outermost-leaf) has an extra TextNode -- &hellip;
-//       var indicies = $collection.map(function (i) {
-//         return i;
-//       });
-//       var index = binarySearch(indicies, {lines: 1}, function (params, index) {
-//         // Slice our collection, replace $item's contents and get the line-height
-//         var $slice = $collection.slice(index);
-// // TODO: Need to coerce to children only junk
-//         $item.empty().append($slice);
-
-//         var lineHeight = $item.css('line-height'),
-//             height = $item.css('height');
-//         console.log(lineHeight, height);
-
-//         var retVal = -1;
-//         // If we are on the line-height, return 0? -- no it should be 'a maximum but not *the* maximum'
-//         if (lineHeight === height) {
-//           retVal = 0;
-//         } else if (lineHeight > height) {
-//           retVal = 1;
-//         }
-
-//         // Return retVal
-//         return retVal;
-//       });
-
-      // TODO: THIS IS NOT PROPER -- WE SHOULD TAKE THE NEXT CELL AND TRY CHOPPING TEXT DOWN TO SEE IF IT FITS
-      // TODO: Collect all of the immediate children of $item as $children
-      // TODO: Take the nodes after, if it is not an immediate child of $item, remove it from its parent. if it is an immediate child, remove it and skip over any future nodes that are not immediate children (since they are automatically removed)
 
       // Thank you, have a nice day!
       return this;
