@@ -50,16 +50,19 @@
 
   // Set up test area
   var $testArea = null,
-      LIPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ligula justo, viverra sed consequat ut, facilisis vel tortor. Nunc et aliquam tortor. Nunc vulputate odio ut lectus volutpat vehicula. In blandit tempus erat ut mattis. Suspendisse malesuada, sapien nec pharetra viverra, nulla neque laoreet lorem, quis dapibus odio erat vel felis. Pellentesque ac nibh eros, dictum placerat turpis. Aenean vel metus nec erat varius cursus vitae sit amet augue. Donec porttitor, urna at volutpat lobortis, urna sem vehicula urna, at euismod felis turpis eget lectus. Vivamus ac dui condimentum neque hendrerit ullamcorper. Donec eu lorem vitae magna lobortis tempor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi non lacus orci. In est tortor, malesuada at varius a, tincidunt a quam. Cras molestie pellentesque sollicitudin.';
+      LIPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ligula justo, viverra sed consequat ut, facilisis vel tortor. Nunc et aliquam tortor. Nunc vulputate odio ut lectus volutpat vehicula. In blandit tempus erat ut mattis. Suspendisse malesuada, sapien nec pharetra viverra, nulla neque laoreet lorem, quis dapibus odio erat vel felis. Pellentesque ac nibh eros, dictum placerat turpis. Aenean vel metus nec erat varius cursus vitae sit amet augue. Donec porttitor, urna at volutpat lobortis, urna sem vehicula urna, at euismod felis turpis eget lectus. Vivamus ac dui condimentum neque hendrerit ullamcorper. Donec eu lorem vitae magna lobortis tempor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi non lacus orci. In est tortor, malesuada at varius a, tincidunt a quam. Cras molestie pellentesque sollicitudin.',
+      testAreaCounter = 0;
   function requireTestArea() {
-    if (!$testArea || !$testArea.length) {
-      $testArea = $('#TEST_AREA');
+    // if (!$testArea || !$testArea.length) {
+      // $testArea = $('#TEST_AREA');
+      testAreaCounter += 1;
+      $testArea = $('#TEST_AREA' + testAreaCounter);
       $testArea.addParagraph = function (str) {
         var $p = $('<p>' + str + '</p>');
         $testArea.append($p);
         return this;
       };
-    }
+    // }
     return $testArea;
   }
 
