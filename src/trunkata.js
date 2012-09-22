@@ -15,6 +15,7 @@
   // TODO: Eventually implement trunk8's left, center, right x_x
   // TODO: trunkata('reset')
   // TODO: Manage default options via $.trunkata?
+  // TODO: More comparators -- width, height
 
   function lineComparator(maxLines) {
     function lineCompFn() {
