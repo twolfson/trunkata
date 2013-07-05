@@ -171,6 +171,25 @@ describe('Three short texts', function () {
   });
 });
 
-// TODO: Test with <br/>
+describe('Text with line breaks', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/line_breaks.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('is truncated', function () {
+      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+    });
+
+    it('has the exclusively first line content', function () {
+      expect(this.node.innerHTML).to.match(/^<div>abc(<br\/?>)?<\/div>$/);
+    });
+  });
+});
 
 // TODO: Test event bindings of children are not lost
