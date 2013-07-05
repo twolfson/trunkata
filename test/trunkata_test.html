@@ -2,6 +2,15 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <style>
+      .test-div {
+        background: limegreen;
+        width: 200px;
+      }
+      .test-div + .test-div {
+        background: lightblue;
+      }
+    </style>
   </head>
   <body>
     <!-- Load in mocha, chai, and testem-->
