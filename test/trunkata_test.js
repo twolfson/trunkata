@@ -1,8 +1,10 @@
+// Load in lib and dependencies
 var trunkata = require('../lib/trunkata.js'),
     expect = require('chai').expect,
     fs = require('fs'),
     domify = require('domify');
 
+// Set up helper action
 function fixtureNode() {
   before(function () {
     // Create our content
@@ -17,6 +19,7 @@ function fixtureNode() {
   });
 }
 
+// Basic tests
 describe('A short string <div>', function () {
   before(function () {
     this.input = fs.readFileSync(__dirname + '/test_files/short_string.html', 'utf8');
@@ -48,10 +51,29 @@ describe('A long string <div>', function () {
     it('is truncated', function () {
       expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
     });
+  });
+});
 
-    // TODO: More appropriately test event bindings of child nodes and parent node
-    it('is the same node', function () {
-      // TODO: Capture child nodes of div?
+// Intermediate tests
+describe.only('A short and long <div>', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/short_long_string.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('removes the second child', function () {
+      expect(this.node.childNodes.length).to.equal(1);
+    });
+
+    it('leaves first child alone', function () {
+      expect(this.node.childNodes[0].innerHTML).to.equal('abc');
     });
   });
 });
+
+// TODO: Test event bindings of children are not lost
