@@ -66,8 +66,11 @@ describe('A short and long <div>', function () {
       trunkata(this.node);
     });
 
-    it('removes the second child', function () {
-      expect(this.node.childNodes.length).to.equal(1);
+    it('removes the second child OR the second child is empty', function () {
+      var childNodes = this.node.childNodes,
+          secondChild = childNodes[1],
+          passed = secondChild ? secondChild.innerHTML === '' : true;
+      expect(passed).to.equal(true);
     });
 
     it('leaves first child alone', function () {
