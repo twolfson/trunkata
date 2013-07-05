@@ -3,20 +3,25 @@ var trunkata = require('../lib/trunkata.js'),
     fs = require('fs'),
     domify = require('domify');
 
-describe('A short string <div>', function () {
+function fixtureNode() {
   before(function () {
     // Create our content
-    var input = fs.readFileSync(__dirname + '/test_files/short_string.html', 'utf8'),
-        node = domify('<div class="test-div">' + input + '</div>');
+    var node = domify('<div class="test-div">' + this.input + '</div>');
     document.body.appendChild(node);
 
     // Save for later
-    this.input = input;
     this.node = node;
   });
-  // after(function () {
-  //   document.body.removeChild(this.node);
-  // });
+  after(function () {
+    // document.body.removeChild(this.node);
+  });
+}
+
+describe('A short string <div>', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/short_string.html', 'utf8');
+  });
+  fixtureNode();
 
   describe('when truncated', function () {
     before(function () {
@@ -31,18 +36,9 @@ describe('A short string <div>', function () {
 
 describe('A long string <div>', function () {
   before(function () {
-    // Create our content
-    var input = fs.readFileSync(__dirname + '/test_files/long_string.html', 'utf8'),
-        node = domify('<div class="test-div">' + input + '</div>');
-    document.body.appendChild(node);
-
-    // Save for later
-    this.input = input;
-    this.node = node;
+    this.input = fs.readFileSync(__dirname + '/test_files/long_string.html', 'utf8');
   });
-  // after(function () {
-  //   document.body.removeChild(this.node);
-  // });
+  fixtureNode();
 
   describe('when truncated', function () {
     before(function () {
