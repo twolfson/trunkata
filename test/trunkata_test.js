@@ -141,7 +141,8 @@ describe('Long linked text', function () {
       expect(this.node.innerHTML).to.contain('<a href="http://github.com/">Non');
     });
 
-    it('has the link as the last child', function () {
+    it('has no trailing non-link ellipsis', function () {
+      // Verify the last node is a link node
       var childNodes = this.node.childNodes,
           nodeName = childNodes[childNodes.length - 1].nodeName.toUpperCase();
       expect(nodeName).to.equal('A');
