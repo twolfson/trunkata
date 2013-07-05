@@ -98,4 +98,52 @@ describe('A long and short <div>', function () {
   });
 });
 
+describe('Linked text', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/linked.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('is truncated', function () {
+      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+    });
+
+    it('keeps the link intact', function () {
+      expect(this.node.innerHTML).to.contain('<a href="http://github.com/">Non amet</a>');
+    });
+  });
+});
+
+describe('Long linked text', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/long_linked.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('is truncated', function () {
+      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+    });
+
+    it('keeps the link intact', function () {
+      expect(this.node.innerHTML).to.contain('<a href="http://github.com/">Non');
+    });
+
+    it('has the link as the last child', function () {
+      var childNodes = this.node.childNodes,
+          nodeName = childNodes[childNodes.length - 1].nodeName.toUpperCase();
+      expect(nodeName).to.equal('A');
+    });
+  });
+});
+
 // TODO: Test event bindings of children are not lost
