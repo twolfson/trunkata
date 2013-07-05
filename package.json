@@ -26,7 +26,8 @@
     "node": ">= 0.6.0"
   },
   "scripts": {
-    "test": "mocha"
+    "pretest": "browserify test/trunkata_test.js --outfile test/trunkata_test.browserify.js",
+    "test": "testem --file test/testem.json ci"
   },
   "dependencies": {},
   "devDependencies": {

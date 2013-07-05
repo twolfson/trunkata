@@ -1,5 +1,4 @@
 {
   "framework": "mocha",
-  "test_page": "test/trunkata_test.html",
-  "before_tests": "./node_modules/.bin/browserify test/trunkata_test.js --outfile test/trunkata_test.browserify.js"
+  "test_page": "test/trunkata_test.html"
 }
