@@ -150,4 +150,27 @@ describe('Long linked text', function () {
   });
 });
 
+describe('Three short texts', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/three_shorts.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('is truncated', function () {
+      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+    });
+
+    it('has at most 2 children', function () {
+      expect(this.node.childNodes.length).to.be.lessThan(3);
+    });
+  });
+});
+
+// TODO: Test with <br/>
+
 // TODO: Test event bindings of children are not lost
