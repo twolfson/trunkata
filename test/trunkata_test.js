@@ -192,4 +192,35 @@ describe('Text with line breaks', function () {
   });
 });
 
-// TODO: Test event bindings of children are not lost
+// Advanced tests
+describe('Content with childNodes', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/linked.html', 'utf8');
+  });
+  fixtureNode();
+  before(function () {
+    // Save a reference to the child node
+    this.childNode = this.node.childNodes[0];
+  });
+
+  it('has a childNode which is a link', function () {
+    var nodeName = this.childNode.nodeName.toUpperCase();
+    expect(nodeName).to.equal('A');
+  });
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('is truncated', function () {
+      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+    });
+
+    // DEV: Alternatively, test event bindings of children are not lost
+    it('the child node is the same', function () {
+      expect(this.node.childNodes[0]).to.equal(this.childNode);
+    });
+  });
+});
+
