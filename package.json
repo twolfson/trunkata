@@ -31,7 +31,8 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.3.17",
-    "mocha": "~1.11.0"
+    "mocha": "~1.11.0",
+    "chai": "~1.7.2"
   },
   "keywords": [
     "truncate",
