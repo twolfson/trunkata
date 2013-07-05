@@ -2,6 +2,8 @@
 
 Truncation utility which preserves HTML tags and content.
 
+This library was created to solve truncating HTML at line breaks rather than at a character index or word. Line breaks are preferred due to the inconsistency of font sizes between browsers.
+
 ## Getting Started
 Install the module with: `npm install trunkata`
 
