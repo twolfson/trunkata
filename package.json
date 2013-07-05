@@ -1,6 +1,6 @@
 {
   "name": "trunkata",
-  "description": "Truncation utility which preserves HTML tags and content.",
+  "description": "Truncation utility which preserves HTML content and can truncate by lines.",
   "version": "0.1.0",
   "homepage": "https://github.com/twolfson/trunkata",
   "author": {
