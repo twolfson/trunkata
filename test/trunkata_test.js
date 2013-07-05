@@ -55,9 +55,9 @@ describe('A long string <div>', function () {
 });
 
 // Intermediate tests
-describe.only('A short and long <div>', function () {
+describe('A short and long <div>', function () {
   before(function () {
-    this.input = fs.readFileSync(__dirname + '/test_files/short_long_string.html', 'utf8');
+    this.input = fs.readFileSync(__dirname + '/test_files/short_long.html', 'utf8');
   });
   fixtureNode();
 
@@ -72,6 +72,28 @@ describe.only('A short and long <div>', function () {
 
     it('leaves first child alone', function () {
       expect(this.node.childNodes[0].innerHTML).to.equal('abc');
+    });
+  });
+});
+
+describe('A long and short <div>', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/long_short.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated', function () {
+    before(function () {
+      trunkata(this.node);
+    });
+
+    it('removes the second child', function () {
+      expect(this.node.childNodes.length).to.equal(1);
+    });
+
+    it('is truncated', function () {
+      var longInput = fs.readFileSync(__dirname + '/test_files/long_string.html', 'utf8');
+      expect(this.node.innerHTML.length).to.be.lessThan(longInput.length);
     });
   });
 });
