@@ -1,19 +1,43 @@
 {
   "name": "trunkata",
-  "version": "0.0.0",
-  "description": "Truncate your DOM with proper form",
-  "main": "lib/trunkata.js",
-  "scripts": {
-    "test": "grunt qunit"
+  "description": "Truncation utility which preserves HTML tags and content.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/twolfson/trunkata",
+  "author": {
+    "name": "Todd Wolfson",
+    "email": "todd@twolfson.com",
+    "url": "http://twolfson.com/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twolfson/trunkata"
+  },
+  "bugs": {
+    "url": "https://github.com/twolfson/trunkata/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/twolfson/trunkata/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/trunkata",
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.3.12"
+    "grunt": "~0.3.17",
+    "mocha": "~1.11.0"
   },
   "keywords": [
-    "dom",
     "truncate",
-    "text"
-  ],
-  "author": "Todd Wolfson <todd@twolfson.com>",
-  "license": "MIT"
+    "text",
+    "dom",
+    "html",
+    "tag"
+  ]
 }
