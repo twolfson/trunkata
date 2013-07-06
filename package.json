@@ -48,7 +48,9 @@
     "tag"
   ],
   "testling": {
-    "scripts": ["test/trunkata_test.js"],
+    "files": [
+      "test/trunkata_test.js"
+    ],
     "harness": "mocha",
     "browsers": [
       "chrome/latest"
