@@ -46,5 +46,17 @@
     "dom",
     "html",
     "tag"
-  ]
+  ],
+  "browserify": {
+    "transform": ["brfs"]
+  },
+  "testling": {
+    "files": [
+      "test/trunkata_test.js"
+    ],
+    "harness": "mocha",
+    "browsers": [
+      "chrome/latest"
+    ]
+  }
 }
