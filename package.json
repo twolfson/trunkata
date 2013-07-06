@@ -48,7 +48,7 @@
     "tag"
   ],
   "testling": {
-    "files": "test/*.js",
+    "scripts": ["test/*.js"],
     "harness": "mocha",
     "browsers": [
       "chrome/latest"
