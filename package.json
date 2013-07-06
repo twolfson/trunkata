@@ -46,5 +46,12 @@
     "dom",
     "html",
     "tag"
-  ]
+  ],
+  "testling": {
+    "files": "test/*.js",
+    "harness": "mocha",
+    "browsers": [
+      "chrome/latest"
+    ]
+  }
 }
