@@ -32,7 +32,7 @@ describe('A short string <div>', function () {
     });
 
     it('is unchanged', function () {
-      expect(this.node.innerHTML).to.equal(this.input);
+      expect(this.node.innerHTML + '1').to.equal(this.input);
     });
   });
 });

@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <link rel="stylesheet" href="../build/build.css" />
     <style>
       .test-div {
         background: red;
@@ -43,11 +43,12 @@
     <!-- Load in mocha, chai, and testem-->
     <div id="mocha"></div>
     <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../build/build.js"></script>
     <!-- <script src="/testem.js"></script> -->
 
     <!-- Configure mocha -->
     <script>
-      mocha.setup('bdd');
+      mocha.setup({ui: 'bdd', reporter: require('visionmedia-mocha-matrix')});
     </script>
 
     <!-- Load in computedStyle -->

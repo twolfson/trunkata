@@ -1,2 +1,5 @@
 node_modules/
 test/trunkata_test.browserify.js
+component
+build/
+components/
