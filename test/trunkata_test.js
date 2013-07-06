@@ -2,14 +2,15 @@
 var trunkata = require('../lib/trunkata.js'),
     expect = require('chai').expect,
     fs = require('fs'),
-    domify = require('domify');
+    domify = require('domify'),
+    $mocha = document.getElementById('mocha');
 
 // Set up helper action
 function fixtureNode() {
   before(function () {
     // Create our content
     var node = domify('<div class="test-div">' + this.input + '</div>');
-    document.body.appendChild(node);
+    document.body.insertBefore(node, $mocha);
 
     // Save for later
     this.node = node;
