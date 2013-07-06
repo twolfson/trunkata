@@ -52,6 +52,10 @@ describe('A long string <div>', function () {
     it('is truncated', function () {
       expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
     });
+
+    it('ends with an ellipsis', function () {
+      expect(this.node.innerHTML.slice(-1)).to.equal('…');
+    });
   });
 });
 
