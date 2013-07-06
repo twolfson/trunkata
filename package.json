@@ -47,6 +47,9 @@
     "html",
     "tag"
   ],
+  "browserify": {
+    "transforms": ["brfs"]
+  },
   "testling": {
     "files": [
       "test/trunkata_test.js"
