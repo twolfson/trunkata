@@ -19,9 +19,7 @@ _(Coming soon)_
 _(Coming soon)_
 
 ## Development
-`component install`
-
-Use `npm run pretest`, and `serve`. Then, navigate to http://localhost:3000/test/trunkata_test.html
+Use `livereload`, `listen-spawn -- npm run pretest`, and `serve`. Then, navigate to http://localhost:3000/test/trunkata_test.html
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint via [grunt](https://github.com/gruntjs/grunt) and test via `npm test`.
