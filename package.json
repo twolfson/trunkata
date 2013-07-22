@@ -26,7 +26,7 @@
     "node": ">= 0.6.0"
   },
   "scripts": {
-    "pretest": "browserify --transform brfs test/trunkata_test.js --outfile test/trunkata_test.browserify.js",
+    "build-test": "browserify --transform brfs test/trunkata_test.js --outfile test/trunkata_test.browserify.js",
     "test": "testem --file test/testem.json ci"
   },
   "dependencies": {
