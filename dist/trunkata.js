@@ -10,20 +10,13 @@ function trunkata(root, options) {
 
   // Determine the line height of the root and current height
   var lnHeight = lineHeight(root),
-      // https://github.com/jquery/jquery/blob/1f67d07c60c37e60052db37fc03d42af482c2d03/src/css.js#L374-L380
       height = root.offsetHeight;
 
-  // TODO: Allow for `height` option (function) which skips over `line-height * lines` computation
   // If the height is over the maximum height, time to optimize
   var maxLines = options.lines || 1,
       maxHeight = lnHeight * maxLines;
   if (height > maxHeight) {
-    // TODO: Use a binary search module
-    // TODO: Find out how many words we have and treat it as a linear array
-    // TODO: Optimization, create a map of when each child starts in the word map so we can jump to them faster
-
     // DEV: Poor speed run-time first
-    // TODO: Go to the last descedendant (all the way down the tree) of the last child, start breaking off words, if none removed there, then go up to next child
     // Collect all nodes in a depth-first traversal
     /*
        A--\

@@ -1,7 +1,7 @@
 {
   "name": "trunkata",
   "repo": "twolfson/trunkata",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Truncation utility which preserves HTML content and can truncate by lines.",
   "dependencies": {
     "line-height": "0.1.1"
