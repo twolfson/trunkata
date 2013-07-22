@@ -1,8 +1,13 @@
 // Load in lib and dependencies
 var trunkata = require('../lib/trunkata.js'),
-    expect = require('chai').expect,
     fs = require('fs'),
+    assert = require('proclaim'),
     domify = require('domify');
+
+// Define a lessThan
+assert.lessThan = function (a, b) {
+  assert.ok(a < b, 'Expected: < ' + b + ', Actual: ' + a);
+};
 
 // Set up helper action
 function fixtureNode() {
@@ -32,7 +37,7 @@ describe('A short string <div>', function () {
     });
 
     it('is unchanged', function () {
-      expect(this.node.innerHTML).to.equal(this.input);
+      assert.strictEqual(this.node.innerHTML, this.input);
     });
   });
 });
@@ -49,11 +54,11 @@ describe('A long string <div>', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     it('ends with an ellipsis', function () {
-      expect(this.node.innerHTML.slice(-1)).to.equal('…');
+      assert.strictEqual(this.node.innerHTML.slice(-1), '…');
     });
   });
 });
@@ -74,11 +79,11 @@ describe('A short and long <div>', function () {
       var childNodes = this.node.childNodes,
           secondChild = childNodes[1],
           passed = secondChild ? secondChild.innerHTML === '' : true;
-      expect(passed).to.equal(true);
+      assert.ok(passed);
     });
 
     it('leaves first child alone', function () {
-      expect(this.node.childNodes[0].innerHTML).to.equal('abc');
+      assert.strictEqual(this.node.childNodes[0].innerHTML, 'abc');
     });
   });
 });
@@ -95,12 +100,12 @@ describe('A long and short <div>', function () {
     });
 
     it('removes the second child', function () {
-      expect(this.node.childNodes.length).to.equal(1);
+      assert.strictEqual(this.node.childNodes.length, 1);
     });
 
     it('is truncated', function () {
       var longInput = fs.readFileSync(__dirname + '/test_files/long_string.html', 'utf8');
-      expect(this.node.innerHTML.length).to.be.lessThan(longInput.length);
+      assert.lessThan(this.node.innerHTML.length, longInput.length);
     });
   });
 });
@@ -117,11 +122,11 @@ describe('Linked text', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     it('keeps the link intact', function () {
-      expect(this.node.innerHTML).to.contain('<a href="http://github.com/">Non amet</a>');
+      assert.includes(this.node.innerHTML, '<a href="http://github.com/">Non amet</a>');
     });
   });
 });
@@ -138,18 +143,18 @@ describe('Long linked text', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     it('keeps the link intact', function () {
-      expect(this.node.innerHTML).to.contain('<a href="http://github.com/">Non');
+      assert.includes(this.node.innerHTML, '<a href="http://github.com/">Non');
     });
 
     it('has no trailing non-link ellipsis', function () {
       // Verify the last node is a link node
       var childNodes = this.node.childNodes,
           nodeName = childNodes[childNodes.length - 1].nodeName.toUpperCase();
-      expect(nodeName).to.equal('A');
+      assert.strictEqual(nodeName, 'A');
     });
   });
 });
@@ -166,11 +171,11 @@ describe('Three short texts', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     it('has at most 2 children', function () {
-      expect(this.node.childNodes.length).to.be.lessThan(3);
+      assert.lessThan(this.node.childNodes.length, 3);
     });
   });
 });
@@ -187,11 +192,11 @@ describe('Text with line breaks', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     it('has the exclusively first line content', function () {
-      expect(this.node.innerHTML).to.match(/^<div>abc(<br\/?>)?<\/div>$/);
+      assert.match(this.node.innerHTML, /^<div>abc(<br\/?>)?<\/div>$/);
     });
   });
 });
@@ -209,7 +214,7 @@ describe('Content with childNodes', function () {
 
   it('has a childNode which is a link', function () {
     var nodeName = this.childNode.nodeName.toUpperCase();
-    expect(nodeName).to.equal('A');
+    assert.strictEqual(nodeName, 'A');
   });
 
   describe('when truncated', function () {
@@ -218,12 +223,12 @@ describe('Content with childNodes', function () {
     });
 
     it('is truncated', function () {
-      expect(this.node.innerHTML.length).to.be.lessThan(this.input.length);
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
     });
 
     // DEV: Alternatively, test event bindings of children are not lost
     it('the child node is the same', function () {
-      expect(this.node.childNodes[0]).to.equal(this.childNode);
+      assert.strictEqual(this.node.childNodes[0], this.childNode);
     });
   });
 });

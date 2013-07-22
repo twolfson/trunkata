@@ -35,10 +35,10 @@
   "devDependencies": {
     "grunt": "~0.3.17",
     "mocha": "~1.11.0",
-    "chai": "~1.7.2",
     "browserify": "~2.23.1",
     "domify": "~1.0.0",
-    "brfs": "0.0.6"
+    "brfs": "0.0.6",
+    "proclaim": "~1.5.0"
   },
   "keywords": [
     "truncate",
