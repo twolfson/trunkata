@@ -27,6 +27,7 @@
   },
   "scripts": {
     "build-test": "browserify --transform brfs test/trunkata_test.js --outfile test/trunkata_test.browserify.js",
+    "build": "browserify lib/trunkata.js --standalone trunkata --outfile dist/trunkata.js",
     "test": "testem ci"
   },
   "dependencies": {
@@ -42,10 +43,12 @@
   },
   "keywords": [
     "truncate",
+    "truncation",
     "text",
     "dom",
     "html",
-    "tag"
+    "tag",
+    "lines"
   ],
   "browserify": {
     "transform": [
@@ -54,11 +57,20 @@
   },
   "testling": {
     "files": [
-      "test/trunkata_test.js"
+      "test/line-height_test.js"
     ],
     "harness": "mocha",
     "browsers": [
-      "chrome/latest"
+      "ie/6..latest",
+      "chrome/20..latest",
+      "chrome/canary",
+      "firefox/10..latest",
+      "firefox/nightly",
+      "safari/latest",
+      "opera/11.0..latest",
+      "opera/next",
+      "iphone/6",
+      "ipad/6"
     ]
   }
 }
