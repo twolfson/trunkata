@@ -202,6 +202,29 @@ describe('Text with line breaks', function () {
       assert.match(this.node.innerHTML.toLowerCase(), /^<div>abc(<br\/?>)?<\/div>$/);
     });
   });
+
+});
+
+describe('Text with at least 3 line breaks', function () {
+  before(function () {
+    this.input = fs.readFileSync(__dirname + '/test_files/line_breaks.html', 'utf8');
+  });
+  fixtureNode();
+
+  describe('when truncated to 2 lines', function () {
+    before(function () {
+      trunkata(this.node, {lines: 2});
+    });
+
+    it('is truncated', function () {
+      assert.lessThan(this.node.innerHTML.length, this.input.length);
+    });
+
+    it('has the exclusively first line content', function () {
+      // DEV: Lower case is required for IE6 (<DIV>...)
+      assert.match(this.node.innerHTML.toLowerCase(), /^<div>abc<br\/?>abc(<br\/?>)?<\/div>$/);
+    });
+  });
 });
 
 // Advanced tests
@@ -235,4 +258,3 @@ describe('Content with childNodes', function () {
     });
   });
 });
-
