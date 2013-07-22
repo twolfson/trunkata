@@ -57,7 +57,7 @@
   },
   "testling": {
     "files": [
-      "test/line-height_test.js"
+      "test/trunkata_test.js"
     ],
     "harness": "mocha",
     "browsers": [
