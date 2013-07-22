@@ -27,7 +27,7 @@
   },
   "scripts": {
     "build-test": "browserify --transform brfs test/trunkata_test.js --outfile test/trunkata_test.browserify.js",
-    "test": "testem --file test/testem.json ci"
+    "test": "testem ci"
   },
   "dependencies": {
     "computed-style": "~0.1.3"
