@@ -11,6 +11,7 @@
   "main": "lib/trunkata.js",
   "keywords": [
     "truncate",
+    "truncation",
     "text",
     "dom",
     "html",
