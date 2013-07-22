@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: '<json:package.json>',
     lint: {
-      files: ['grunt.js', 'lib/**/*.js', 'test/**/*.js']
+      files: ['grunt.js', 'lib/**/*.js', 'test/*_test.js']
     },
     watch: {
       files: '<config:lint.files>',
@@ -22,6 +22,7 @@ module.exports = function(grunt) {
         undef: true,
         boss: true,
         eqnull: true,
+        browser: true,
         node: true,
 
         strict: false
@@ -30,6 +31,7 @@ module.exports = function(grunt) {
         exports: true,
         describe: true,
         before: true,
+        after: true,
         it: true
       }
     }
