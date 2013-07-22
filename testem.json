@@ -1,4 +1,9 @@
 {
   "framework": "mocha",
+  "before_tests": "npm run build-test",
+  "src_files": [
+    "lib/trunkata.js",
+    "test/trunkata_test.js"
+  ],
   "test_page": "test/trunkata_test.html"
 }
