@@ -126,7 +126,8 @@ describe('Linked text', function () {
     });
 
     it('keeps the link intact', function () {
-      assert.includes(this.node.innerHTML, '<a href="http://github.com/">Non amet</a>');
+      // DEV: Lower case is required for IE6 (<A href=...)
+      assert.includes(this.node.innerHTML.toLowerCase(), '<a href="http://github.com/">non amet</a>');
     });
   });
 });
@@ -147,7 +148,8 @@ describe('Long linked text', function () {
     });
 
     it('keeps the link intact', function () {
-      assert.includes(this.node.innerHTML, '<a href="http://github.com/">Non');
+      // DEV: Lower case is required for IE6 (<A href=...)
+      assert.includes(this.node.innerHTML.toLowerCase(), '<a href="http://github.com/">non');
     });
 
     it('has no trailing non-link ellipsis', function () {
@@ -196,7 +198,8 @@ describe('Text with line breaks', function () {
     });
 
     it('has the exclusively first line content', function () {
-      assert.match(this.node.innerHTML, /^<div>abc(<br\/?>)?<\/div>$/);
+      // DEV: Lower case is required for IE6 (<DIV>...)
+      assert.match(this.node.innerHTML.toLowerCase(), /^<div>abc(<br\/?>)?<\/div>$/);
     });
   });
 });
